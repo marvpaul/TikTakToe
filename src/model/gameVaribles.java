@@ -1,5 +1,7 @@
 package model;
 
+import View.ManageGUI;
+
 /**
  * Created by marvinkruger on 18.01.17.
  */
@@ -14,7 +16,7 @@ public class gameVaribles {
         turnDetector = !turnDetector;
     }
 
-    public static void clickOnField(int x, int y){
+    public static void clickOnField(int x, int y) throws InterruptedException {
         if(turnDetector && fields[x][y] == 0){
             fields[x][y] = 1;
             checkIfWon(x, y, true, 0, 0, 0);
@@ -36,7 +38,7 @@ public class gameVaribles {
         return false;
     }
 
-    private static void checkIfWon(int x, int y, boolean o, int xStep, int yStep, int count){
+    private static void checkIfWon(int x, int y, boolean o, int xStep, int yStep, int count) throws InterruptedException {
 
         //Initialze all recursive calls for each direction
         if(xStep == 0 && yStep == 0){
@@ -67,7 +69,9 @@ public class gameVaribles {
                 if((fields[x][y] == 1 && o) || (fields[x][y] == 2 && !o)){
                     count++;
                     if(count == 4){
-                        System.out.println("won");
+
+                        Thread.sleep(1000);
+                        ManageGUI.showWonDialogue();
                     }    else{
                         checkIfWon(x, y, o, xStep, yStep, count);
                     }

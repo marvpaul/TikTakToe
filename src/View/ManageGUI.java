@@ -38,17 +38,6 @@ public class ManageGUI {
                 frame.add(panelHolder[m][n]);
             }
         }
-
-        //Test to assign some images to the panel holder
-        /*
-        for(int m = 0; m < 5; m++) {
-            for (int n = 0; n < 5; n++) {
-                if(n % 2 == 1)
-                    panelHolder[m][n].add(loadImage("x"));
-                else
-                    panelHolder[m][n].add(loadImage("o"));
-            }
-        }*/
         frame.setVisible(true);
     }
 
@@ -91,5 +80,19 @@ public class ManageGUI {
         }
         panelHolder[y][x].setVisible(true);
         frame.setVisible(true);
+    }
+
+    public static void showWonDialogue(){
+        for(int m = 0; m < 5; m++) {
+            for (int n = 0; n < 5; n++) {
+                frame.remove(panelHolder[m][n]);
+            }
+        }
+                JLabel text = new JLabel();
+                text.setText("Won!");
+                text.setSize(300, 300);
+                text.setVisible(true);
+                frame.add(text);
+
     }
 }

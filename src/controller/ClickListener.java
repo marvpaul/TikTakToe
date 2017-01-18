@@ -21,12 +21,19 @@ public class ClickListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         if(gameVaribles.isValidTurn(x, y)){
             gameVaribles.makeTurn();
-            gameVaribles.clickOnField(x, y);
+
+            try {
+                gameVaribles.clickOnField(x, y);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
             try {
                 ManageGUI.setImageToField(x, y, gameVaribles.isTurnDetector());
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+
         }
 
     }
