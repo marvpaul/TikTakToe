@@ -1,10 +1,10 @@
 package View;
 
+import controller.ClickListener;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,10 @@ public class ManageGUI {
     public static JPanel[][] panelHolder = new JPanel[5][5];
 
     public static void main(String[] args) throws IOException {
+        initializeMainFrame();
+    }
+
+    private static void initializeMainFrame() throws IOException {
         GridLayout layout = new GridLayout(5,5);
 
         frame = new JFrame();
@@ -36,14 +40,15 @@ public class ManageGUI {
         }
 
         //Test to assign some images to the panel holder
+        /*
         for(int m = 0; m < 5; m++) {
             for (int n = 0; n < 5; n++) {
                 if(n % 2 == 1)
-                panelHolder[m][n].add(loadImage("x"));
+                    panelHolder[m][n].add(loadImage("x"));
                 else
                     panelHolder[m][n].add(loadImage("o"));
             }
-        }
+        }*/
         frame.setVisible(true);
     }
 
@@ -54,7 +59,7 @@ public class ManageGUI {
      * @return a JPanel which includes the 50 x 50 image
      * @throws IOException when there is a loading problem caused f.e. by harddrive failures
      */
-    public static JPanel loadImage(String name) throws IOException{
+    private static JPanel loadImage(String name) throws IOException{
         JPanel imageWrapper = new JPanel();
         switch (name){
             case "x":
@@ -78,4 +83,13 @@ public class ManageGUI {
         return imageWrapper;
     }
 
+    public static void setImageToField(int x, int y, boolean o) throws IOException {
+        if(o){
+            panelHolder[y][x].add(loadImage("x"));
+        } else{
+            panelHolder[y][x].add(loadImage("o"));
+        }
+        panelHolder[y][x].setVisible(true);
+        frame.setVisible(true);
+    }
 }
