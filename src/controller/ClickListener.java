@@ -1,7 +1,7 @@
 package controller;
 
-import View.ManageGUI;
-import model.gameVaribles;
+import View.UI;
+import model.Fields;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -19,17 +19,17 @@ public class ClickListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(gameVaribles.isValidTurn(x, y)){
-            gameVaribles.makeTurn();
+        if(Fields.isValidTurn(x, y)){
+            Fields.changeTurnVariable();
 
             try {
-                gameVaribles.clickOnField(x, y);
+                Fields.clickOnField(x, y);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
 
             try {
-                ManageGUI.setImageToField(x, y, gameVaribles.isTurnDetector());
+                UI.setImageToField(x, y, Fields.isTurnDetector());
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
