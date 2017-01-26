@@ -2,16 +2,18 @@ package model;
 
 import View.UI;
 
+import java.util.Arrays;
+
 /**
  * Created by marvinkruger on 18.01.17.
  */
 public
 class Fields {
     private static boolean turnDetector = false;
-
+    public static final int SIZE = 5;
     //holds the data about content of a field
     //0 - empty, 1 - o, 2 - x
-    private static int[][] fields = new int[5][5];
+    private static int[][] fields = new int[SIZE][SIZE];
 
     /**
      * Switch to the other players turn
@@ -30,10 +32,14 @@ class Fields {
         if(isValidTurn(x, y)){
             if(turnDetector){
                 fields[x][y] = 1;
-                checkIfWon(x, y, true, 0, 0, 0);
+                if(checkIfWonRec(x, y, true, 0, 0, 0) >= 5){
+                    UI.showWonDialogue(true);
+                }
             } else{
                 fields[x][y] = 2;
-                checkIfWon(x, y, false, 0, 0, 0);
+                if(checkIfWonRec(x, y, false, 0, 0, 0) >= 5){
+                    UI.showWonDialogue(false);
+                }
             }
         }
     }
@@ -63,8 +69,8 @@ class Fields {
      * Is called when JFrame was resized. Rescale each image
      */
     public static void scaling() {
-        for (int i = 0; i < 5; i++) {
-            for (int m = 0; m < 5; m++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int m = 0; m < SIZE; m++) {
                 if(fields[i][m] > 0){
                     if(fields[i][m] == 1){
                         UI.setImageToField(i, m, true);
@@ -79,15 +85,14 @@ class Fields {
 
     /**
      * Recursive method to check if the current player has won the game
-     * @param x
-     * @param y
-     * @param o
-     * @param xStep
-     * @param yStep
-     * @param count
-     * @throws InterruptedException
+     * @param x the current opened field x coordinate
+     * @param y the current opened field y coordinate
+     * @param o true if the current opened field is a o, else it's a x
+     * @param xStep the x offset
+     * @param yStep the y offset
+     * @param count the count for following fields of same species
      */
-    private static void checkIfWon(int x, int y, boolean o, int xStep, int yStep, int count) throws InterruptedException {
+    private static void checkIfWon(int x, int y, boolean o, int xStep, int yStep, int count)  {
 
         //Initialze all recursive calls for each direction
         if(xStep == 0 && yStep == 0){
@@ -117,10 +122,8 @@ class Fields {
             if((x > 0 && y > 0 && x < 4 && y < 4) || (!(x < 0 && xStep == -1) && !(y < 0 && yStep == -1) && !(x > 4 && xStep == 1) && !(y > 4 && yStep == 1))){
                 if((fields[x][y] == 1 && o) || (fields[x][y] == 2 && !o)){
                     count++;
-                    if(count == 4){
-
-                        Thread.sleep(1000);
-                        UI.showWonDialogue();
+                    if(count == SIZE){
+                        UI.showWonDialogue(o);
                     }    else{
                         checkIfWon(x, y, o, xStep, yStep, count);
                     }
@@ -129,5 +132,55 @@ class Fields {
         }
     }
 
+
+    /**
+     * recursive method to check the maximum x or o depending on a certain field
+     * @param x the current opened field x coordinate
+     * @param y the current opened field y coordinate
+     * @param o true if the current opened field is a o, else it's a x
+     * @param xStep the x offset
+     * @param yStep the y offset
+     * @param count the count for following fields of same species
+     * @return the maximum value of x or o in a row
+     */
+    private static int checkIfWonRec(int x, int y, boolean o, int xStep, int yStep, int count)  {
+
+        //Initialze all recursive calls for each direction
+        if(xStep == 0 && yStep == 0){
+            int count1 = checkIfWonRec(x, y, o, -1, -1, 1) + checkIfWonRec(x, y, o, 1, 1, 1) -1;
+
+            int count2 = checkIfWonRec(x, y, o, 1, 0, 1) + checkIfWonRec(x, y, o, -1, 0,1) -1;
+
+            int count3 = checkIfWonRec(x, y, o, 0, 1, 1)  + checkIfWonRec(x, y, o, 0, -1, 1) -1 ;
+
+            int count4 = checkIfWonRec(x, y, o, 1, -1, 1) + checkIfWonRec(x, y, o, -1, 1, 1) -1;
+
+            int[] countArray = new int[]{count1, count2, count3, count4};
+            System.out.println(Arrays.toString(countArray));
+            Arrays.sort(countArray);
+            return countArray[countArray.length-1];
+
+        }
+        else{
+            x += xStep;
+            y += yStep;
+            // no edge collision
+            if((x > 0 && y > 0 && x < 4 && y < 4) || (!(x < 0 && xStep == -1) && !(y < 0 && yStep == -1) && !(x > 4 && xStep == 1) && !(y > 4 && yStep == 1))){
+                if((fields[x][y] == 1 && o) || (fields[x][y] == 2 && !o)){
+                    count++;
+                    return checkIfWonRec(x, y, o, xStep, yStep, count);
+                } else{
+                    return count;
+                }
+            }
+            return count;
+        }
+    }
+
+
+    public static void Restart(){
+        fields = new int[SIZE][SIZE];
+        turnDetector = false;
+    }
 
 }

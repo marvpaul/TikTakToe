@@ -1,7 +1,9 @@
 package View;
 
 import controller.ClickListener;
+import controller.MenuListener;
 import controller.ResizeListener;
+import model.Fields;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,9 +18,9 @@ import java.io.IOException;
 public class UI {
 
     private static JFrame frame;
-    static final int FRAME_SIZE = 330, SIZE = 5;
+    public static final int FRAME_SIZE = 330;
 
-    public static JPanel[][] panelHolder = new JPanel[SIZE][SIZE];
+    public static JPanel[][] panelHolder = new JPanel[Fields.SIZE][Fields.SIZE];
 
 
     public static void main(String[] args){
@@ -32,12 +34,19 @@ public class UI {
     private static void initializeMainFrame() {
 
         frame = new JFrame();
-        frame.setLayout ( new GridLayout(SIZE,SIZE));
+        frame.setLayout ( new GridLayout(Fields.SIZE,Fields.SIZE));
         frame.setMinimumSize(new Dimension(FRAME_SIZE,FRAME_SIZE));
 
+        MenuBar mB = new MenuBar();
+        mB.add(new Menu("Start", false));
+        MenuItem mI = new MenuItem("Restart", new MenuShortcut(1, false));
+        mI.addActionListener(new MenuListener());
+        mB.getMenu(0).add(mI);
+        frame.setMenuBar(mB);
+
         //Add panelHolders to frame and add a mouse listener for each field
-        for(int m = 0; m < SIZE; m++) {
-            for (int n = 0; n < SIZE; n++) {
+        for(int m = 0; m < Fields.SIZE; m++) {
+            for (int n = 0; n < Fields.SIZE; n++) {
                 panelHolder[m][n] = new JPanel();
                 panelHolder[m][n].addMouseListener(new ClickListener(n, m));
                 frame.add(panelHolder[m][n]);
@@ -62,7 +71,7 @@ public class UI {
         BufferedImage bufImage= ImageIO.read(new File("./" + name + ".png"));
 
         //Scale image, add to JLabel and add this JLabel to JPanel imageWrapper
-        imageWrapper.add(new JLabel(new ImageIcon(bufImage.getScaledInstance(frame.getWidth()/6, frame.getHeight()/6, Image.SCALE_DEFAULT))));
+        imageWrapper.add(new JLabel(new ImageIcon(bufImage.getScaledInstance(frame.getWidth()/7, frame.getHeight()/7, Image.SCALE_DEFAULT))));
 
         return imageWrapper;
     }
@@ -93,16 +102,28 @@ public class UI {
     }
 
 
-    public static void showWonDialogue(){
-        for(int m = 0; m < SIZE; m++) {
-            for (int n = 0; n < SIZE; n++) {
+    public static void showWonDialogue(boolean o){
+        for(int m = 0; m < Fields.SIZE; m++) {
+            for (int n = 0; n < Fields.SIZE; n++) {
+                panelHolder[m][n].removeAll();
                 frame.remove(panelHolder[m][n]);
             }
         }
-                JLabel text = new JLabel();
-                text.setText("Won!");
-                text.setVisible(true);
-                frame.add(text);
+        JLabel text = new JLabel();
+        if(o){
+            text.setText("X Won!");
+        } else{
+            text.setText("O Won!");
+        }
+        text.setVisible(true);
+        frame.add(text);
+        frame.repaint();
+    }
 
+    public static void Restart(){
+        frame.dispose();
+        initializeMainFrame();
+        frame.repaint();
+        frame.setVisible(true);
     }
 }

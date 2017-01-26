@@ -9,7 +9,6 @@ import java.awt.event.ComponentListener;
  * Created by Marvin Krüger S0556109.
  */
 public class ResizeListener implements ComponentListener {
-    //public static int timeBetween = 0F;
     @Override
     public void componentResized(ComponentEvent e) {
         Fields.scaling();

@@ -4,7 +4,6 @@ import View.UI;
 import model.Fields;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 /**
  * Created by marvinkruger on 18.01.17.
@@ -28,11 +27,7 @@ public class ClickListener implements MouseListener {
                 e1.printStackTrace();
             }
 
-            try {
-                UI.setImageToField(x, y, Fields.isTurnDetector());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            UI.setImageToField(x, y, Fields.isTurnDetector());
 
         }
 
