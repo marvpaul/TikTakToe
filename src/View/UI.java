@@ -29,14 +29,15 @@ public class UI {
 
     /**
      * Initialize the main frame
-     * @throws IOException
      */
     private static void initializeMainFrame() {
 
+        //Create main frame
         frame = new JFrame();
         frame.setLayout ( new GridLayout(Fields.SIZE,Fields.SIZE));
         frame.setMinimumSize(new Dimension(FRAME_SIZE,FRAME_SIZE));
 
+        //Add menu bar with restart function
         MenuBar mB = new MenuBar();
         mB.add(new Menu("Start", false));
         MenuItem mI = new MenuItem("Restart", new MenuShortcut(1, false));
@@ -102,6 +103,10 @@ public class UI {
     }
 
 
+    /**
+     * Handle to show the dialogue for the winner
+     * @param o o has won if true, else x has won
+     */
     public static void showWonDialogue(boolean o){
         for(int m = 0; m < Fields.SIZE; m++) {
             for (int n = 0; n < Fields.SIZE; n++) {
@@ -120,6 +125,9 @@ public class UI {
         frame.repaint();
     }
 
+    /**
+     * Restart function to start a new game
+     */
     public static void Restart(){
         frame.dispose();
         initializeMainFrame();

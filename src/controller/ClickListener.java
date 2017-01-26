@@ -11,11 +11,21 @@ import java.awt.event.MouseListener;
 public class ClickListener implements MouseListener {
     private int x, y;
 
+    /**
+     * Public constructor
+     * @param x the x coordinate of this ClickLiseteners JPanel in the Grid
+     * @param y the y coordinate of this ClickLiseteners JPanel in the Grid
+     */
     public ClickListener(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Fires when a mouse click was performed
+     * Handles all necessary functions to open a field and add a x or o
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         if(Fields.isValidTurn(x, y)){

@@ -9,6 +9,10 @@ import java.awt.event.ComponentListener;
  * Created by Marvin Krüger S0556109.
  */
 public class ResizeListener implements ComponentListener {
+    /**
+     * Fires when the main frame was resized
+     * @param e the current ComponentEvent
+     */
     @Override
     public void componentResized(ComponentEvent e) {
         Fields.scaling();

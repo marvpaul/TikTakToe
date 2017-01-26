@@ -178,6 +178,10 @@ class Fields {
     }
 
 
+    /**
+     * Function to handle the restart in the model class
+     * It resets the field and turn variable
+     */
     public static void Restart(){
         fields = new int[SIZE][SIZE];
         turnDetector = false;
